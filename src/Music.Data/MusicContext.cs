@@ -5,7 +5,7 @@ namespace Music.Data
 {
     public class MusicContext : DbContext
     {
-        public MusicContext(DbContextOptions options) : base(options)
+        public MusicContext(DbContextOptions<MusicContext> options) : base(options)
         {
         }
 
