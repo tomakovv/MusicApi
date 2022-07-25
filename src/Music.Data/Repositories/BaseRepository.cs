@@ -1,31 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Music.Data.Repositories.Interfaces;
+﻿using Music.Data.Repositories.Interfaces;
 
 namespace Music.Data.Repositories
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        private readonly DbContext _context;
+        private readonly MusicContext _context;
 
-        public BaseRepository(DbContext context)
+        public BaseRepository(MusicContext context)
         {
             _context = context;
         }
 
-        public void Add(T entity)
+        public async Task<IEnumerable<T>> GetAllAsync() => _context.Set<T>().AsEnumerable();
+
+        public async Task<T> AddAsync(T entity)
         {
-            _context.Set<T>().Add(entity);
-            _context.SaveChanges();
+            var addedElement = await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return addedElement.Entity;
         }
 
-        public void Delete(T entity)
+        public async Task DeleteAsync(T entity)
         {
-            _context.Set<T>().Remove(entity);
-            _context.SaveChanges();
+            _context.Remove(entity);
+            await _context.SaveChangesAsync();
         }
-
-        public T Get(Func<T, bool> condition) => _context.Set<T>().AsNoTracking().Where(condition).FirstOrDefault();
-
-        public IEnumerable<T> GetAll() => _context.Set<T>().AsNoTracking().ToList();
     }
 }
