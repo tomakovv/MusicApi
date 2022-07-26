@@ -13,6 +13,7 @@ namespace Music.Data.Repositories
             _context = context;
         }
 
-        public async Task<Song> GetSongByIdAsync(int id) => await _context.Songs.AsNoTracking().Where(s => s.Id == id).FirstOrDefaultAsync();
+        public async Task<IEnumerable<Song>> GetAllSongsWithMembersAsync() => _context.Songs.Include(s => s.Genre).Include(s => s.Artist).AsNoTracking().AsEnumerable();
+        public async Task<Song> GetSongByIdAsync(int id) => await _context.Songs.Include(s => s.Genre).Include(s => s.Artist).AsNoTracking().Where(s => s.Id == id).FirstOrDefaultAsync();
     }
 }
