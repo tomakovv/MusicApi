@@ -18,6 +18,8 @@ builder.Services.AddDbContext<MusicContext>(options =>
 options.UseSqlServer(connectionString)
 );
 builder.Services.AddScoped<ISongRepository, SongRepository>();
+builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<ISongService, SongService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

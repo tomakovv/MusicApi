@@ -12,8 +12,8 @@ using Music.Data;
 namespace Music.Data.Migrations
 {
     [DbContext(typeof(MusicContext))]
-    [Migration("20220725120021_Initial")]
-    partial class Initial
+    [Migration("20220726150702_Second")]
+    partial class Second
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -118,9 +118,6 @@ namespace Music.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PlaylistId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AlbumId");
@@ -129,9 +126,22 @@ namespace Music.Data.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.HasIndex("PlaylistId");
-
                     b.ToTable("Songs");
+                });
+
+            modelBuilder.Entity("PlaylistSong", b =>
+                {
+                    b.Property<int>("PlaylistId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SongsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PlaylistId", "SongsId");
+
+                    b.HasIndex("SongsId");
+
+                    b.ToTable("PlaylistSong");
                 });
 
             modelBuilder.Entity("Music.Data.Entities.Album", b =>
@@ -159,15 +169,26 @@ namespace Music.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Music.Data.Entities.Playlist", null)
-                        .WithMany("Songs")
-                        .HasForeignKey("PlaylistId");
-
                     b.Navigation("Album");
 
                     b.Navigation("Artist");
 
                     b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("PlaylistSong", b =>
+                {
+                    b.HasOne("Music.Data.Entities.Playlist", null)
+                        .WithMany()
+                        .HasForeignKey("PlaylistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Music.Data.Entities.Song", null)
+                        .WithMany()
+                        .HasForeignKey("SongsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Music.Data.Entities.Album", b =>
@@ -179,11 +200,6 @@ namespace Music.Data.Migrations
                 {
                     b.Navigation("Albums");
 
-                    b.Navigation("Songs");
-                });
-
-            modelBuilder.Entity("Music.Data.Entities.Playlist", b =>
-                {
                     b.Navigation("Songs");
                 });
 #pragma warning restore 612, 618

@@ -20,9 +20,15 @@ namespace Music.Data.Repositories
             return addedElement.Entity;
         }
 
+        public async Task UpdateAsync(T entity)
+        {
+            _context.Set<T>().Update(entity);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteAsync(T entity)
         {
-            _context.Remove(entity);
+            _context.Set<T>().Remove(entity);
             await _context.SaveChangesAsync();
         }
     }

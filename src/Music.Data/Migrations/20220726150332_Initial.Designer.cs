@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Music.Data;
 
@@ -11,9 +12,10 @@ using Music.Data;
 namespace Music.Data.Migrations
 {
     [DbContext(typeof(MusicContext))]
-    partial class MusicContextModelSnapshot : ModelSnapshot
+    [Migration("20220726150332_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,6 +118,9 @@ namespace Music.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PlaylistId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AlbumId");
@@ -124,22 +129,9 @@ namespace Music.Data.Migrations
 
                     b.HasIndex("GenreId");
 
+                    b.HasIndex("PlaylistId");
+
                     b.ToTable("Songs");
-                });
-
-            modelBuilder.Entity("PlaylistSong", b =>
-                {
-                    b.Property<int>("PlaylistId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SongsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PlaylistId", "SongsId");
-
-                    b.HasIndex("SongsId");
-
-                    b.ToTable("PlaylistSong");
                 });
 
             modelBuilder.Entity("Music.Data.Entities.Album", b =>
@@ -167,26 +159,15 @@ namespace Music.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Music.Data.Entities.Playlist", null)
+                        .WithMany("Songs")
+                        .HasForeignKey("PlaylistId");
+
                     b.Navigation("Album");
 
                     b.Navigation("Artist");
 
                     b.Navigation("Genre");
-                });
-
-            modelBuilder.Entity("PlaylistSong", b =>
-                {
-                    b.HasOne("Music.Data.Entities.Playlist", null)
-                        .WithMany()
-                        .HasForeignKey("PlaylistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Music.Data.Entities.Song", null)
-                        .WithMany()
-                        .HasForeignKey("SongsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Music.Data.Entities.Album", b =>
@@ -198,6 +179,11 @@ namespace Music.Data.Migrations
                 {
                     b.Navigation("Albums");
 
+                    b.Navigation("Songs");
+                });
+
+            modelBuilder.Entity("Music.Data.Entities.Playlist", b =>
+                {
                     b.Navigation("Songs");
                 });
 #pragma warning restore 612, 618

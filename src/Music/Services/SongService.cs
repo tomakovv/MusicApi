@@ -28,5 +28,24 @@ namespace Music.Services
             var song = await _songRepository.GetSongByIdAsync(id);
             return _mapper.Map<SongDto>(song);
         }
+
+        public async Task<SongDto> AddSongAsync(AddSongDto newSongDto)
+        {
+            var song = _mapper.Map<Song>(newSongDto);
+            await _songRepository.AddAsync(song);
+            return _mapper.Map<SongDto>(song);
+        }
+
+        public async Task UpdateSongAsync(UpdateSongDto songDto)
+        {
+            var song = _mapper.Map<Song>(songDto);
+            await _songRepository.UpdateAsync(song);
+        }
+
+        public async Task DeleteSongAsync(int id)
+        {
+            var song = await _songRepository.GetSongByIdAsync(id);
+            await _songRepository.DeleteAsync(song);
+        }
     }
 }

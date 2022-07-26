@@ -13,6 +13,8 @@ namespace Music.Mapper
                 .ForMember(dest => dest.Artist, act => act.MapFrom(src => src.Artist.Name));
 
             CreateMap<SongDto, Song>();
+            CreateMap<AddSongDto, Song>();
+            CreateMap<UpdateSongDto, Song>();
         }
     }
 }

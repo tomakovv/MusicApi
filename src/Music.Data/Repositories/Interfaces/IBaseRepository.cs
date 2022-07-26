@@ -6,6 +6,8 @@
 
         Task DeleteAsync(T entity);
 
+        Task UpdateAsync(T entity);
+
         Task<IEnumerable<T>> GetAllAsync();
     }
 }
