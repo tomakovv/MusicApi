@@ -19,8 +19,8 @@ namespace Music.Services
 
         public async Task<IEnumerable<SongDto>> GetAllSongsAsync()
         {
-            var songs = _songRepository.GetAllSongsWithMembersAsync();
-            return _mapper.Map<IEnumerable<SongDto>>(songs.Result);
+            var songs = await _songRepository.GetAllSongsWithMembersAsync();
+            return _mapper.Map<IEnumerable<SongDto>>(songs);
         }
 
         public async Task<SongDto> GetSongById(int id)
@@ -36,9 +36,10 @@ namespace Music.Services
             return _mapper.Map<SongDto>(song);
         }
 
-        public async Task UpdateSongAsync(UpdateSongDto songDto)
+        public async Task UpdateSongAsync(int id, UpdateSongDto songDto)
         {
-            var song = _mapper.Map<Song>(songDto);
+            var song = await _songRepository.GetSongByIdAsync(id);
+            song = _mapper.Map(songDto, song);
             await _songRepository.UpdateAsync(song);
         }
 

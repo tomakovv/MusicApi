@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Music.Data.Entities;
+using Music.Dto.Playlist;
 using Music.Dto.Song;
 
 namespace Music.Mapper
@@ -15,6 +16,8 @@ namespace Music.Mapper
             CreateMap<SongDto, Song>();
             CreateMap<AddSongDto, Song>();
             CreateMap<UpdateSongDto, Song>();
+            CreateMap<PlaylistDto, Playlist>();
+            CreateMap<Playlist, PlaylistDto>();
         }
     }
 }

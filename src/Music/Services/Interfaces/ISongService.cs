@@ -10,7 +10,7 @@ namespace Music.Services.Interfaces
 
         Task<SongDto> AddSongAsync(AddSongDto song);
 
-        Task UpdateSongAsync(UpdateSongDto songDto);
+        Task UpdateSongAsync(int id, UpdateSongDto songDto);
 
         Task DeleteSongAsync(int id);
     }

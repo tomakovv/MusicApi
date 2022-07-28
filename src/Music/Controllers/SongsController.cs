@@ -51,9 +51,9 @@ namespace Music.Controllers
 
         [SwaggerOperation(Summary = "Update specific song ")]
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync(UpdateSongDto songDto)
+        public async Task<IActionResult> UpdateAsync(int id, UpdateSongDto songDto)
         {
-            await _songService.UpdateSongAsync(songDto);
+            await _songService.UpdateSongAsync(id, songDto);
             return NoContent();
         }
 
