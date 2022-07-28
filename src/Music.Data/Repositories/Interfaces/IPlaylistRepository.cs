@@ -7,5 +7,7 @@ namespace Music.Data.Repositories.Interfaces
         Task<Playlist> GetPlaylistByIdAsync(int id);
 
         Task<Playlist> GetPlaylistWithSongsByIdAsync(int id);
+
+        Task<bool> IsPlaylistExistAsync(string name);
     }
 }

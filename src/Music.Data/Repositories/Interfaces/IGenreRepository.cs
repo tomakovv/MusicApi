@@ -2,7 +2,7 @@
 
 namespace Music.Data.Repositories.Interfaces
 {
-    public interface IGenreRepository
+    public interface IGenreRepository : IBaseRepository<Genre>
     {
         Task<Genre> GetGenreByIdAsync(int id);
     }

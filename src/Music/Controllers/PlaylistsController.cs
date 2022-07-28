@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Music.Dto.Playlist;
 using Music.Services.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -28,7 +29,7 @@ namespace Music.Controllers
         }
 
         [SwaggerOperation(Summary = "Retrieves specific Playlist")]
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetByIdAsync")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var playlist = await _playlistService.GetPlaylistByIdAsync(id);
@@ -55,12 +56,29 @@ namespace Music.Controllers
         [HttpGet("{playlistId}/songs/{songId}")]
         public async Task<IActionResult> GetSongsFromPlaylistAsync([FromRoute] int playlistId, [FromRoute] int songId)
         {
-            var song = await _playlistService.GetSongFromPlaylist(playlistId, songId);
+            var song = await _playlistService.GetSongFromPlaylistAsync(playlistId, songId);
             if (song is not null)
             {
                 return Ok(song);
             }
             return NotFound();
+        }
+
+        [SwaggerOperation(Summary = "Delete specific playlist ")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            await _playlistService.DeletePlaylistAsync(id);
+            return NoContent();
+        }
+
+        [SwaggerOperation(Summary = "Add new playlist")]
+        [HttpPost]
+        public async Task<IActionResult> AddAsync(AddPlaylistDto playlistDto)
+        {
+            var newPlaylist = await _playlistService.AddPlaylistAsync(playlistDto);
+
+            return CreatedAtRoute(nameof(GetByIdAsync), new { id = newPlaylist.Id }, newPlaylist);
         }
     }
 }

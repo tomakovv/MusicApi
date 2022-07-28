@@ -16,5 +16,7 @@ namespace Music.Data.Repositories
         public async Task<Playlist> GetPlaylistByIdAsync(int id) => await _context.Playlists.Where(s => s.Id == id).FirstOrDefaultAsync();
 
         public async Task<Playlist> GetPlaylistWithSongsByIdAsync(int id) => await _context.Playlists.Include(p => p.Songs).Where(s => s.Id == id).FirstOrDefaultAsync();
+
+        public async Task<bool> IsPlaylistExistAsync(string name) => await _context.Playlists.Where(s => s.Name == name).AnyAsync();
     }
 }

@@ -1,10 +1,9 @@
 ﻿using Music.Dto.Song;
 
-namespace Music.Dto.Playlist
+namespace Music.Dto.Album
 {
-    public class PlaylistDto
+    public class AlbumWithSongsDto
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public IEnumerable<SongDto> Songs { get; set; }
     }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Music.Data.Entities;
 using Music.Data.Repositories.Interfaces;
 using Music.Dto.Playlist;
 using Music.Dto.Song;
@@ -35,7 +36,7 @@ namespace Music.Services
             return _mapper.Map<PlaylistDto>(playlist);
         }
 
-        public async Task<SongDto> GetSongFromPlaylist(int playlistId, int songId)
+        public async Task<SongDto> GetSongFromPlaylistAsync(int playlistId, int songId)
         {
             var playlist = await _playlistRepository.GetPlaylistWithSongsByIdAsync(playlistId);
             if (playlist.Songs.Any(s => s.Id == songId))
@@ -44,6 +45,22 @@ namespace Music.Services
                 return _mapper.Map<SongDto>(song);
             }
             return null;
+        }
+
+        public async Task<PlaylistDto> AddPlaylistAsync(AddPlaylistDto playlistDto)
+        {
+            if (!await _playlistRepository.IsPlaylistExistAsync(playlistDto.Name))
+            {
+                var playlist = await _playlistRepository.AddAsync(new Playlist() { Name = playlistDto.Name });
+                return _mapper.Map<PlaylistDto>(playlist);
+            }
+            return null;
+        }
+
+        public async Task DeletePlaylistAsync(int id)
+        {
+            var playlist = await _playlistRepository.GetPlaylistByIdAsync(id);
+            await _playlistRepository.DeleteAsync(playlist);
         }
     }
 }

@@ -11,6 +11,10 @@ namespace Music.Services.Interfaces
 
         Task<PlaylistDto> GetPlaylistByIdWithSongsAsync(int id);
 
-        Task<SongDto> GetSongFromPlaylist(int playlistId, int songId);
+        Task<SongDto> GetSongFromPlaylistAsync(int playlistId, int songId);
+
+        Task<PlaylistDto> AddPlaylistAsync(AddPlaylistDto playlistDto);
+
+        Task DeletePlaylistAsync(int id);
     }
 }

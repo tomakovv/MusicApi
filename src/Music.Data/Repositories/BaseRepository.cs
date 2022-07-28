@@ -1,4 +1,5 @@
-﻿using Music.Data.Repositories.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Music.Data.Repositories.Interfaces;
 
 namespace Music.Data.Repositories
 {
@@ -11,7 +12,7 @@ namespace Music.Data.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync() => _context.Set<T>().AsEnumerable();
+        public async Task<IEnumerable<T>> GetAllAsync() => await _context.Set<T>().ToListAsync();
 
         public async Task<T> AddAsync(T entity)
         {
