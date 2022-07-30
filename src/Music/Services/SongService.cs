@@ -31,6 +31,11 @@ namespace Music.Services
 
         public async Task<SongDto> AddSongAsync(AddSongDto newSongDto)
         {
+            var SongAlreadyAdded = await _songRepository.CheckIfSongExistsAsync(newSongDto.Name);
+            if (SongAlreadyAdded)
+            {
+                return null;
+            }
             var song = _mapper.Map<Song>(newSongDto);
             await _songRepository.AddAsync(song);
             return _mapper.Map<SongDto>(song);

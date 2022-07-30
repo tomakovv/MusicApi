@@ -11,6 +11,12 @@ namespace Music.Services.Interfaces
 
         Task<GenreWithSongsDto> GetGenreByIdWithSongsAsync(int id);
 
-        Task<SongDto> GetSongFromGenre(int genreId, int songId);
+        Task<SongDto> GetSongFromGenreAsync(int genreId, int songId);
+
+        Task<GenreDto> AddGenreAsync(AddGenreDto genreDto);
+
+        Task EditGenreAsync(int id, EditGenreDto genreDto);
+
+        Task DeleteGenreAsync(int id);
     }
 }

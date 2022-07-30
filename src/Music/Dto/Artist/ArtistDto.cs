@@ -1,8 +1,6 @@
-﻿using Music.Dto.Song;
-
-namespace Music.Dto.Album
+﻿namespace Music.Dto.Artist
 {
-    public class AlbumDto
+    public class ArtistDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

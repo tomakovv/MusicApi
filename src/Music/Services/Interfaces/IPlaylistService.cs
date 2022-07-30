@@ -15,6 +15,12 @@ namespace Music.Services.Interfaces
 
         Task<PlaylistDto> AddPlaylistAsync(AddPlaylistDto playlistDto);
 
+        Task UpdatePlaylistAsync(int id, AddPlaylistDto playlistDto);
+
         Task DeletePlaylistAsync(int id);
+
+        Task AddSongToPlaylist(int playlistId, int songId);
+
+        Task DeleteSongFromPlaylist(int playlistId, int songId);
     }
 }

@@ -10,11 +10,13 @@ namespace Music.Services
     public class PlaylistService : IPlaylistService
     {
         private readonly IPlaylistRepository _playlistRepository;
+        private readonly ISongRepository _songRepository;
         private readonly IMapper _mapper;
 
-        public PlaylistService(IPlaylistRepository songRepository, IMapper mapper)
+        public PlaylistService(IPlaylistRepository playlistRepository, IMapper mapper, ISongRepository songRepository)
         {
-            _playlistRepository = songRepository;
+            _playlistRepository = playlistRepository;
+            _songRepository = songRepository;
             _mapper = mapper;
         }
 
@@ -57,10 +59,29 @@ namespace Music.Services
             return null;
         }
 
+        public async Task UpdatePlaylistAsync(int id, AddPlaylistDto playlistDto)
+        {
+            var playlist = await _playlistRepository.GetPlaylistByIdAsync(id);
+            playlist = _mapper.Map(playlistDto, playlist);
+            await _playlistRepository.UpdateAsync(playlist);
+        }
+
         public async Task DeletePlaylistAsync(int id)
         {
             var playlist = await _playlistRepository.GetPlaylistByIdAsync(id);
             await _playlistRepository.DeleteAsync(playlist);
+        }
+
+        public async Task AddSongToPlaylist(int playlistId, int songId)
+        {
+            var song = await _songRepository.GetSongByIdAsync(songId);
+            await _playlistRepository.AddSongToPlaylist(playlistId, song);
+        }
+
+        public async Task DeleteSongFromPlaylist(int playlistId, int songId)
+        {
+            var song = await _songRepository.GetSongByIdAsync(songId);
+            await _playlistRepository.DeleteSongFromPlaylist(playlistId, song);
         }
     }
 }

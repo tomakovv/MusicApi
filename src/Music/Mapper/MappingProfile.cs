@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Music.Data.Entities;
 using Music.Dto.Album;
+using Music.Dto.Artist;
 using Music.Dto.Genre;
 using Music.Dto.Playlist;
 using Music.Dto.Song;
@@ -19,15 +20,27 @@ namespace Music.Mapper
             CreateMap<AddSongDto, Song>();
             CreateMap<UpdateSongDto, Song>();
             CreateMap<PlaylistDto, Playlist>();
+            CreateMap<AddPlaylistDto, Playlist>()
+                .ForMember(dest => dest.Name, act => act.MapFrom(src => src.Name));
             CreateMap<Playlist, PlaylistDto>();
             CreateMap<Album, AlbumDto>();
             CreateMap<AlbumDto, Album>();
             CreateMap<AlbumWithSongsDto, Album>();
+            CreateMap<Album, AddAlbumDto>();
+            CreateMap<AddAlbumDto, Album>();
+            CreateMap<EditAlbumDto, Album>();
+            CreateMap<Album, EditAlbumDto>();
             CreateMap<Album, AlbumWithSongsDto>();
             CreateMap<Genre, GenreDto>();
             CreateMap<GenreDto, Genre>();
             CreateMap<GenreWithSongsDto, Genre>();
             CreateMap<Genre, GenreWithSongsDto>();
+            CreateMap<Genre, AddGenreDto>();
+            CreateMap<AddGenreDto, Genre>();
+            CreateMap<EditGenreDto, Genre>();
+            CreateMap<Genre, EditGenreDto>();
+            CreateMap<Artist, ArtistDto>();
+            CreateMap<ArtistDto, Artist>();
         }
     }
 }

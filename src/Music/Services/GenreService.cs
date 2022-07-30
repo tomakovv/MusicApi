@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Music.Data.Entities;
 using Music.Data.Repositories.Interfaces;
 using Music.Dto.Genre;
 using Music.Dto.Song;
@@ -35,7 +36,7 @@ namespace Music.Services
             return _mapper.Map<GenreWithSongsDto>(genre);
         }
 
-        public async Task<SongDto> GetSongFromGenre(int genreId, int songId)
+        public async Task<SongDto> GetSongFromGenreAsync(int genreId, int songId)
         {
             var genre = await _genreRepository.GetGenreByIdAsync(genreId);
             if (genre.Songs.Any(s => s.Id == songId))
@@ -44,6 +45,26 @@ namespace Music.Services
                 return _mapper.Map<SongDto>(song);
             }
             return null;
+        }
+
+        public async Task<GenreDto> AddGenreAsync(AddGenreDto genreDto)
+        {
+            var newGenre = _mapper.Map<Genre>(genreDto);
+            var genre = await _genreRepository.AddAsync(newGenre);
+            return _mapper.Map<GenreDto>(genre);
+        }
+
+        public async Task EditGenreAsync(int id, EditGenreDto genreDto)
+        {
+            var genre = await _genreRepository.GetGenreByIdAsync(id);
+            _mapper.Map(genreDto, genre);
+            await _genreRepository.UpdateAsync(genre);
+        }
+
+        public async Task DeleteGenreAsync(int id)
+        {
+            var genre = await _genreRepository.GetGenreByIdAsync(id);
+            await _genreRepository.DeleteAsync(genre);
         }
     }
 }

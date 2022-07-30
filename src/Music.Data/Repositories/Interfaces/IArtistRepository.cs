@@ -2,7 +2,7 @@
 
 namespace Music.Data.Repositories.Interfaces
 {
-    public interface IArtistRepository
+    public interface IArtistRepository : IBaseRepository<Artist>
     {
         Task<Artist> GetArtistByIdAsync(int id);
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Music.Dto.Song;
 using Music.Services.Interfaces;
+using Serilog;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Music.Controllers
@@ -10,22 +11,25 @@ namespace Music.Controllers
     public class SongsController : ControllerBase
     {
         private readonly ISongService _songService;
+        private readonly ILogger<SongsController> _logger;
 
-        public SongsController(ISongService songService)
+        public SongsController(ISongService songService, ILogger<SongsController> logger)
         {
             _songService = songService;
+            _logger = logger;
         }
 
         [SwaggerOperation(Summary = "Retrieves all Songs")]
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAllSongsAsync()
         {
+            _logger.LogInformation("Retrieves all Songs");
             var songs = await _songService.GetAllSongsAsync();
-            if (songs is not null)
+            if (songs == null || songs.Count() == 0)
             {
-                return Ok(songs);
+                return NotFound();
             }
-            return NotFound();
+            return Ok(songs);
         }
 
         [SwaggerOperation(Summary = "Retrieves specific song by id")]
@@ -33,11 +37,11 @@ namespace Music.Controllers
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var song = await _songService.GetSongById(id);
-            if (song is not null)
+            if (song == null)
             {
-                return Ok(song);
+                return NotFound();
             }
-            return NotFound();
+            return Ok(song);
         }
 
         [SwaggerOperation(Summary = "Add specific song ")]
@@ -45,7 +49,10 @@ namespace Music.Controllers
         public async Task<IActionResult> AddAsync(AddSongDto songDto)
         {
             var song = await _songService.AddSongAsync(songDto);
-
+            if (song == null)
+            {
+                return BadRequest();
+            }
             return Created($"api/songs/{song.Id}", song);
         }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Music.Dto.Album;
 using Music.Services.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -56,12 +57,36 @@ namespace Music.Controllers
         [HttpGet("{albumId}/songs/{songId}")]
         public async Task<IActionResult> GetSongsFromPlaylistAsync([FromRoute] int albumId, [FromRoute] int songId)
         {
-            var song = await _albumService.GetSongFromAlbum(albumId, songId);
+            var song = await _albumService.GetSongFromAlbumAsync(albumId, songId);
             if (song is not null)
             {
                 return Ok(song);
             }
             return NotFound();
+        }
+
+        [SwaggerOperation(Summary = "Edit specific Album")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditAsync(int id, EditAlbumDto albumDto)
+        {
+            await _albumService.EditGenreAsync(id, albumDto);
+            return NoContent();
+        }
+
+        [SwaggerOperation(Summary = "Create a new Album")]
+        [HttpPost]
+        public async Task<IActionResult> AddAsync(AddAlbumDto albumDto)
+        {
+            var newAlbum = await _albumService.AddAlbumAsync(albumDto);
+            return CreatedAtRoute(nameof(GetByIdAsync), new { id = newAlbum.Id }, newAlbum);
+        }
+
+        [SwaggerOperation(Summary = "Delete specific Album")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            await _albumService.DeleteAlbumAsync(id);
+            return NoContent();
         }
     }
 }

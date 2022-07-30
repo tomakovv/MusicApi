@@ -80,5 +80,29 @@ namespace Music.Controllers
 
             return CreatedAtRoute(nameof(GetByIdAsync), new { id = newPlaylist.Id }, newPlaylist);
         }
+
+        [SwaggerOperation(Summary = "Update specific playlist")]
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsync(int id, AddPlaylistDto songDto)
+        {
+            await _playlistService.UpdatePlaylistAsync(id, songDto);
+            return NoContent();
+        }
+
+        [SwaggerOperation(Summary = "Add song to specific playlist")]
+        [HttpPut("{playlistId}/songs/add/{songToaddId}")]
+        public async Task<IActionResult> AddSongToPlaylistAsync(int playlistId, int songToAddId)
+        {
+            await _playlistService.AddSongToPlaylist(playlistId, songToAddId);
+            return NoContent();
+        }
+
+        [SwaggerOperation(Summary = "Remove song from specific playlist")]
+        [HttpPut("{playlistId}/songs/delete/{songToDeleteId}")]
+        public async Task<IActionResult> DeleteSongFromPlaylistAsync(int playlistId, int songToDeleteId)
+        {
+            await _playlistService.DeleteSongFromPlaylist(playlistId, songToDeleteId);
+            return NoContent();
+        }
     }
 }

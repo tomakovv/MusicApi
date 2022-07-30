@@ -9,5 +9,9 @@ namespace Music.Data.Repositories.Interfaces
         Task<Playlist> GetPlaylistWithSongsByIdAsync(int id);
 
         Task<bool> IsPlaylistExistAsync(string name);
+
+        Task AddSongToPlaylist(int id, Song song);
+
+        Task DeleteSongFromPlaylist(int id, Song song);
     }
 }

@@ -13,6 +13,6 @@ namespace Music.Data.Repositories
             _context = context;
         }
 
-        public async Task<Genre> GetGenreByIdAsync(int id) => await _context.Genres.Include(g => g.Songs).FirstOrDefaultAsync();
+        public async Task<Genre> GetGenreByIdAsync(int id) => await _context.Genres.Include(g => g.Songs).Where(g => g.Id == id).FirstOrDefaultAsync();
     }
 }

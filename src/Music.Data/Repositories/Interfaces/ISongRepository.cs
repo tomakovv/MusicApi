@@ -7,5 +7,7 @@ namespace Music.Data.Repositories.Interfaces
         Task<IEnumerable<Song>> GetAllSongsWithMembersAsync();
 
         Task<Song> GetSongByIdAsync(int id);
+
+        Task<bool> CheckIfSongExistsAsync(string songName);
     }
 }

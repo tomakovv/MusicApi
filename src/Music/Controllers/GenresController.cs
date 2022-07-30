@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Music.Dto.Genre;
 using Music.Services.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -56,12 +56,36 @@ namespace Music.Controllers
         [HttpGet("{genreId}/songs/{songId}")]
         public async Task<IActionResult> GetSongsFromPlaylistAsync([FromRoute] int genreId, [FromRoute] int songId)
         {
-            var song = await _genreService.GetSongFromGenre(genreId, songId);
+            var song = await _genreService.GetSongFromGenreAsync(genreId, songId);
             if (song is not null)
             {
                 return Ok(song);
             }
             return NotFound();
+        }
+
+        [SwaggerOperation(Summary = "Create a new genre")]
+        [HttpPost]
+        public async Task<IActionResult> AddAsync(AddGenreDto genreDto)
+        {
+            var newGenre = await _genreService.AddGenreAsync(genreDto);
+            return CreatedAtRoute(nameof(GetByIdAsync), new { id = newGenre.Id }, newGenre);
+        }
+
+        [SwaggerOperation(Summary = "Edit specific genre")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditAsync(int id, EditGenreDto genreDto)
+        {
+            await _genreService.EditGenreAsync(id, genreDto);
+            return NoContent();
+        }
+
+        [SwaggerOperation(Summary = "Delete specific genre")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            await _genreService.DeleteGenreAsync(id);
+            return NoContent();
         }
     }
 }

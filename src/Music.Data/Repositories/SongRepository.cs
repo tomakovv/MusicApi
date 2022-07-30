@@ -16,5 +16,7 @@ namespace Music.Data.Repositories
         public async Task<IEnumerable<Song>> GetAllSongsWithMembersAsync() => await _context.Songs.Include(s => s.Genre).Include(s => s.Artist).AsNoTracking().ToListAsync();
 
         public async Task<Song> GetSongByIdAsync(int id) => await _context.Songs.Include(s => s.Genre).Include(s => s.Artist).Where(s => s.Id == id).FirstOrDefaultAsync();
+
+        public async Task<bool> CheckIfSongExistsAsync(string songName) => await _context.Songs.AnyAsync(s => s.Name.ToLower() == songName.ToLower());
     }
 }
