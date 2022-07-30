@@ -29,23 +29,35 @@ namespace Music.Services
             return _mapper.Map<SongDto>(song);
         }
 
-        public async Task<SongDto> AddSongAsync(AddSongDto newSongDto)
+        public async Task<OperationResult<SongDto>> AddSongAsync(AddSongDto newSongDto)
         {
-            var SongAlreadyAdded = await _songRepository.CheckIfSongExistsAsync(newSongDto.Name);
-            if (SongAlreadyAdded)
+            if (string.IsNullOrEmpty(newSongDto.Name))
+                return OperationResult<SongDto>.Fail("Name field can't be empty");
+
+            var songAlreadyAdded = await _songRepository.CheckIfSongExistsAsync(newSongDto.Name);
+            if (songAlreadyAdded)
             {
-                return null;
+                return OperationResult<SongDto>.Fail("Song already exist");
             }
+
             var song = _mapper.Map<Song>(newSongDto);
             await _songRepository.AddAsync(song);
-            return _mapper.Map<SongDto>(song);
+            return OperationResult<SongDto>.Success(_mapper.Map<SongDto>(song));
         }
 
-        public async Task UpdateSongAsync(int id, UpdateSongDto songDto)
+        public async Task<OperationResult> UpdateSongAsync(int id, UpdateSongDto songDto)
         {
             var song = await _songRepository.GetSongByIdAsync(id);
+            if (song == null)
+            {
+                return OperationResult.Fail("Song with provided Id does not exist");
+            }
+            // TODO Finish validation for UpdateSongDto members
+            {
+            }
             song = _mapper.Map(songDto, song);
             await _songRepository.UpdateAsync(song);
+            return OperationResult.Success();
         }
 
         public async Task DeleteSongAsync(int id)

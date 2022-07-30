@@ -25,10 +25,6 @@ namespace Music.Controllers
         {
             _logger.LogInformation("Retrieves all Songs");
             var songs = await _songService.GetAllSongsAsync();
-            if (songs == null || songs.Count() == 0)
-            {
-                return NotFound();
-            }
             return Ok(songs);
         }
 
@@ -39,7 +35,7 @@ namespace Music.Controllers
             var song = await _songService.GetSongById(id);
             if (song == null)
             {
-                return NotFound();
+                return NotFound("sad");
             }
             return Ok(song);
         }
@@ -48,11 +44,14 @@ namespace Music.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync(AddSongDto songDto)
         {
-            var song = await _songService.AddSongAsync(songDto);
-            if (song == null)
+            var operationResult = await _songService.AddSongAsync(songDto);
+            if (operationResult.Status == Services.OperationStatus.Fail)
             {
-                return BadRequest();
+                _logger.LogError("Error message: {error}", operationResult.ErrorMessage);
+                return BadRequest(operationResult.ErrorMessage);
             }
+
+            var song = operationResult.Value;
             return Created($"api/songs/{song.Id}", song);
         }
 
@@ -60,7 +59,11 @@ namespace Music.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(int id, UpdateSongDto songDto)
         {
-            await _songService.UpdateSongAsync(id, songDto);
+            var operrationResult = await _songService.UpdateSongAsync(id, songDto);
+            if (operrationResult.Status == Services.OperationStatus.Fail)
+            {
+                return BadRequest(operrationResult.ErrorMessage);
+            }
             return NoContent();
         }
 

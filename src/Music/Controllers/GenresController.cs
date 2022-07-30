@@ -29,8 +29,8 @@ namespace Music.Controllers
         }
 
         [SwaggerOperation(Summary = "Retrieves specific Genre")]
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        [HttpGet("{id}", Name = "GetGenreByIdAsync")]
+        public async Task<IActionResult> GetGenreByIdAsync(int id)
         {
             var genre = await _genreService.GetGenreByIdAsync(id);
             if (genre is not null)
@@ -42,7 +42,7 @@ namespace Music.Controllers
 
         [SwaggerOperation(Summary = "Retrieves songs from specific Genre")]
         [HttpGet("{id}/songs")]
-        public async Task<IActionResult> GetSongsFromPlaylistAsync(int id)
+        public async Task<IActionResult> GetSongsFromGenreAsync(int id)
         {
             var genre = await _genreService.GetGenreByIdWithSongsAsync(id);
             if (genre is not null)
@@ -69,7 +69,7 @@ namespace Music.Controllers
         public async Task<IActionResult> AddAsync(AddGenreDto genreDto)
         {
             var newGenre = await _genreService.AddGenreAsync(genreDto);
-            return CreatedAtRoute(nameof(GetByIdAsync), new { id = newGenre.Id }, newGenre);
+            return CreatedAtRoute(nameof(GetGenreByIdAsync), new { id = newGenre.Id }, newGenre);
         }
 
         [SwaggerOperation(Summary = "Edit specific genre")]
